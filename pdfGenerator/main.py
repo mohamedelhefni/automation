@@ -78,9 +78,10 @@ def move_video(file):
 
 def download_folder(folder_id, creds):
     files = get_folder_videos(folder_id)
-    with concurrent.futures.ThreadPoolExecutor() as ex:
-        for video in ex.map(download_video, files):
-            move_video(video)
+    for file  in files:
+        download_video(file)
+        move_video(file.get("name"))
+
 
 
 def main():
