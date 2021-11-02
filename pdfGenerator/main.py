@@ -1,6 +1,7 @@
 from __future__ import print_function
 import os
 import shutil
+import math
 import subprocess
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -54,9 +55,9 @@ def download_video(file):
 
 def split_video(dir_path, video):
     video_path = dir_path + "/" + video
-    # command = f"ffmpeg -i {video_path} -r .016 {dir_path + '/frame_%04d.png'}"
+    frame_per_second = math.ceil(1/60) # frames / seconds
     p = subprocess.Popen(["ffmpeg", "-i", video_path, "-r",
-                          ".016", dir_path + "/frame_%04d.png"])
+                          str(frame_per_second), dir_path + "/frame_%04d.png"])
     while p.poll() is None:
         print("spliting  lecture ", end="\r")
     else:
