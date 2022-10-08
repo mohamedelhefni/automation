@@ -1,5 +1,6 @@
+#!/usr/bin/python3
+
 import os
-import stringcase
 import requests
 import sys
 from bs4 import BeautifulSoup
@@ -60,12 +61,11 @@ json_data = {
 
 response = requests.post('https://leetcode.com/graphql', headers=headers, json=json_data)
 question = response.json()['data']['question']
-soup = BeautifulSoup(question['content'], features="html.parser")
+content = BeautifulSoup(question['content'], features="html.parser")
 title = question['title'].replace(" ", "")
 goCode = [lang['code'] for lang in question['codeSnippets'] if lang['lang'] == 'Go'][0]
-description = "//" + soup.get_text().replace("\n", "\n//")
+description = "// " + content.get_text().replace("\n", "\n// ")
 os.mkdir(title)
-
 with open(f"{title}/main.go", "w") as f :
     f.write(go_template(description, goCode))
     
